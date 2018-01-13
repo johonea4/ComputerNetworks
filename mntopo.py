@@ -8,6 +8,10 @@ class MNTopo(Topo):
     "Mininet test topology"
 
     def __init__(self, cpu=.1, max_queue_size=None, **params):
+        '''
+        Sender:0----->1:s1:2------>1:s2:2----->1:s3:2---->0:Receiver
+
+        ''' 
 
         # Initialize topo
         Topo.__init__(self, **params)
@@ -19,11 +23,17 @@ class MNTopo(Topo):
 
         # Hosts and switches
         s1 = self.addSwitch('s1')
+        s2 = self.addSwitch('s2')
+        s3 = self.addSwitch('s3')
         sender = self.addHost('sender', **hostConfig)
         receiver = self.addHost('receiver', **hostConfig)
 
         # Wire receiver
         self.addLink(receiver, s1, port1=0, port2=1, **linkConfig)
 
+        #Wire Switches
+        self.addLink(s1, s2, port1=2, port2=1, **linkConfig)
+        self.addLink(s2,s3,port1=2, port2=1, **linkConfig)
+
         # Wire sender
-        self.addLink(sender, s1, port1=0, port2=2, **linkConfig)
+        self.addLink(sender, s3, port1=0, port2=2, **linkConfig)
