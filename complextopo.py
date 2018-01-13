@@ -23,9 +23,9 @@ class ComplexTopo(Topo):
         
         #Link Configs
         hostConfig = {'cpu': cpu}
-        wifiConfig = {'bw': 10, 'delay': 6, 'loss': 3, 'max_queue_size': max_queue_size}
-        ethConfig = {'bw': 25 , 'delay': 2, 'loss': 0, 'max_queue_size': max_queue_size}
-        cellConfig = {'bw': 3, 'delay': 10, 'loss': 8, 'max_queue_size': max_queue_size}
+        wifiConfig = {'bw': 10, 'delay': '6ms', 'loss': 3, 'max_queue_size': max_queue_size}
+        ethConfig = {'bw': 25 , 'delay': '2ms', 'loss': 0, 'max_queue_size': max_queue_size}
+        cellConfig = {'bw': 3, 'delay': '10ms', 'loss': 8, 'max_queue_size': max_queue_size}
 
         #Switches
         s1 = self.addSwitch('s1')
@@ -39,9 +39,9 @@ class ComplexTopo(Topo):
         h3 = self.addHost('h3',**hostConfig)
 
         #wire everything up
-        self.addLink(h1, s1, port1=0, port2=1, **ethConfig)
-        self.addLink(s1, s2, port1=0, port2=1, **ethConfig)
-        self.addLink(s2, s3, port1=0, port2=1, **ethConfig)
-        self.addLink(s3, h2, port1=0, port2=1, **wifiConfig)
-        self.addLink(s4, s2, port1=0, port2=2, **ethConfig)
-        self.addLink(h3, s4, port1=0, port2=1, **cellConfig)
+        self.addLink(h1, s1, **ethConfig)
+        self.addLink(s1, s2, **ethConfig)
+        self.addLink(s2, s3, **ethConfig)
+        self.addLink(h2, s3, **wifiConfig)
+        self.addLink(s4, s2, **ethConfig)
+        self.addLink(h3, s4, **cellConfig)
