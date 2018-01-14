@@ -93,7 +93,7 @@ def main():
     #      Here, you will need to generate this line of code for each switch.
     #HINT: You will need to get the switch objects from the net object defined above.
 
-    for s in range(1,z+1):
+    for s in range(1,args.z+1):
         zstr = "s" + str(s)
         switch = net.get(zstr)
         switch.cmd('ovs-vsctl set bridge ' +  zstr + ' stp-enable=true')
