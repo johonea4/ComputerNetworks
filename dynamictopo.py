@@ -61,7 +61,27 @@ class DynamicTopo(Topo):
         #NOTE: You MUST label hosts as h1-1, h1-2, ... hz-n     
         #HINT: Use a loop to construct the topology in pieces.
 
+        switches = []
+        linkconfig = {'bw': bw, 'delay': delay, 'loss': 0,'max_queue_size': max_queue_size}
+        hostconfig = {'cpu': cpu}
+
+        for zone in range(1,z+1):
+            zstr = "s" + str(zone)
+            switches.append(self.addSwitch(zstr))
+            for host in range(1,n+1):
+                hname = "h" + zstr + "-" + str(host)
+                self.addHost(hname,**hostconfig)
+                self.addLink(hname,zstr,**linkconfig)
         
+        for s in range(0,len(switches)):
+            s1=switches[s]
+            s2=None
+            if s-1==-1:
+                s2 = switches[len(switches)-1]
+            else:
+                s2 = switches[s-1]
+            self.addLink(s1,s2,**linkconfig)
+
 def main():
     "Create specified topology and launch the command line interface"    
     topo = DynamicTopo(n=args.n, delay=args.delay, z=args.z, bw=args.bw)
@@ -72,6 +92,11 @@ def main():
     #      This is done with the following line of code: s1.cmd('ovs-vsctl set bridge s1 stp-enable=true')
     #      Here, you will need to generate this line of code for each switch.
     #HINT: You will need to get the switch objects from the net object defined above.
+
+    for s in range(1,z+1):
+        zstr = "s" + str(s)
+        switch = net.get(zstr)
+        switch.cmd('ovs-vsctl set bridge ' +  zstr + ' stp-enable=true')
 
     CLI(net)
     net.stop()
