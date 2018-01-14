@@ -69,7 +69,7 @@ class DynamicTopo(Topo):
             zstr = "s" + str(zone)
             switches.append(self.addSwitch(zstr))
             for host in range(1,n+1):
-                hname = "h" + zstr + "-" + str(host)
+                hname = "h" + str(zone) + "-" + str(host)
                 self.addHost(hname,**hostconfig)
                 self.addLink(hname,zstr,**linkconfig)
         
